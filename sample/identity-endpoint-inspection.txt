@@ -1,0 +1,92 @@
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-5-using Microsoft.Extensions.Options;
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-6-using Microsoft.IdentityModel.Tokens;
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-7-using System.IdentityModel.Tokens.Jwt;
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-8-using System.Security.Claims;
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-9-using System.Text;
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-10-
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-11-namespace AuthECAPI.Controllers
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-12-{
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:13:  public class UserRegistrationModel
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-14-  {
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-15-    public string Email { get; set; }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-16-    public string Password { get; set; }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-17-    public string FullName { get; set; }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-18-    public string Role { get; set; }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-19-    public string Gender { get; set; }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-20-    public int Age { get; set; }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-21-    public int? LibraryID { get; set; }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-22-  }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-23-
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:24:  public class LoginModel
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-25-  {
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-26-    public string Email { get; set; }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-27-    public string Password { get; set; }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-28-  }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-29-
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-30-  public static class IdentityUserEndpoints
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-31-  {
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:32:    public static IEndpointRouteBuilder MapIdentityUserEndpoints(this IEndpointRouteBuilder app)
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-33-    {
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:34:      app.MapPost("/signup", CreateUser);
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:35:      app.MapPost("/signin", SignIn);
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-36-      return app;
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-37-    }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-38-
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-39-    [AllowAnonymous]
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-40-    private static async Task<IResult> CreateUser(
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-41-        UserManager<AppUser> userManager,
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:42:        [FromBody] UserRegistrationModel userRegistrationModel)
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-43-    {
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-44-      AppUser user = new AppUser()
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-45-      {
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:46:        UserName = userRegistrationModel.Email,
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:47:        Email = userRegistrationModel.Email,
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:48:        FullName = userRegistrationModel.FullName,
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:49:        Gender = userRegistrationModel.Gender,
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:50:        DOB = DateOnly.FromDateTime(DateTime.Now.AddYears(-userRegistrationModel.Age)),
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:51:        LibraryID = userRegistrationModel.LibraryID,
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-52-      };
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:53:      var result = await userManager.CreateAsync(
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-54-          user,
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:55:          userRegistrationModel.Password);
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:56:      await userManager.AddToRoleAsync(user, userRegistrationModel.Role);
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-57-
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-58-      if (result.Succeeded)
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-59-        return Results.Ok(result);
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-60-      else
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-61-        return Results.BadRequest(result);
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-62-    }
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-63-
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-64-    [AllowAnonymous]
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-65-    private static async Task<IResult> SignIn(
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-66-        UserManager<AppUser> userManager,
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:67:            [FromBody] LoginModel loginModel,
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-68-            IOptions<AppSettings> appSettings)
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-69-    {
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:70:      var user = await userManager.FindByEmailAsync(loginModel.Email);
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:71:      if (user != null && await userManager.CheckPasswordAsync(user, loginModel.Password))
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-72-      {
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-73-        var roles = await userManager.GetRolesAsync(user);
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-74-        var signInKey = new SymmetricSecurityKey(
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-75-                        Encoding.UTF8.GetBytes(appSettings.Value.JWTSecret)
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-76-                        );
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-77-        ClaimsIdentity claims = new ClaimsIdentity(new Claim[]
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-78-        {
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-79-          new Claim("UserID",user.Id.ToString()),
+--
+AuthECAPI/AuthECAPI/Program.cs-26-app.ConfigureSwaggerExplorer()
+AuthECAPI/AuthECAPI/Program.cs-27-   .ConfigureCORS(builder.Configuration)
+AuthECAPI/AuthECAPI/Program.cs-28-   .AddIdentityAuthMiddlewares();
+AuthECAPI/AuthECAPI/Program.cs-29-
+AuthECAPI/AuthECAPI/Program.cs-30-app.MapControllers();
+AuthECAPI/AuthECAPI/Program.cs-31-app.MapGroup("/api")
+AuthECAPI/AuthECAPI/Program.cs-32-   .MapIdentityApi<AppUser>();
+AuthECAPI/AuthECAPI/Program.cs-33-app.MapGroup("/api")
+AuthECAPI/AuthECAPI/Program.cs:34:   .MapIdentityUserEndpoints()
+AuthECAPI/AuthECAPI/Program.cs-35-   .MapAccountEndpoints()
+AuthECAPI/AuthECAPI/Program.cs-36-   .MapAuthorizationDemoEndpoints();
+AuthECAPI/AuthECAPI/Program.cs-37-
+AuthECAPI/AuthECAPI/Program.cs-38-app.Run();
+AuthECAPI/AuthECAPI/Program.cs-39-
+AuthECAPI/AuthECAPI/Program.cs-40-
+AuthECAPI/AuthECAPI/Program.cs-41-
