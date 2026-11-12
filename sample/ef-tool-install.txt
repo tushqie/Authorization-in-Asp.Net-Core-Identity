@@ -1,0 +1,8 @@
+========== DOTNET EF VERSION ==========
+Entity Framework Core .NET Command-line Tools
+8.0.7
+
+========== INSTALLED DOTNET TOOLS ==========
+Package Id      Version      Commands 
+--------------------------------------
+dotnet-ef       8.0.7        dotnet-ef
