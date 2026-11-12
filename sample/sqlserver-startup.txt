@@ -1,0 +1,60 @@
+2026-11-12 22:25:14.11 spid13s     Database 'model_msdb' running the upgrade step from version 947 to version 948.
+2026-11-12 22:25:14.11 spid13s     Database 'model_msdb' running the upgrade step from version 948 to version 949.
+2026-11-12 22:25:14.12 spid13s     Database 'model_msdb' running the upgrade step from version 949 to version 950.
+2026-11-12 22:25:14.12 spid13s     Database 'model_msdb' running the upgrade step from version 950 to version 951.
+2026-11-12 22:25:14.14 spid13s     Database 'model_msdb' running the upgrade step from version 951 to version 952.
+2026-11-12 22:25:14.14 spid13s     Database 'model_msdb' running the upgrade step from version 952 to version 953.
+2026-11-12 22:25:14.16 spid13s     Database 'model_msdb' running the upgrade step from version 953 to version 954.
+2026-11-12 22:25:14.16 spid13s     Database 'model_msdb' running the upgrade step from version 954 to version 955.
+2026-11-12 22:25:14.17 spid13s     Database 'model_msdb' running the upgrade step from version 955 to version 956.
+2026-11-12 22:25:14.18 spid13s     Database 'model_msdb' running the upgrade step from version 956 to version 957.
+2026-11-12 22:25:14.22 spid13s     Resource governor reconfiguration succeeded.
+2026-11-12 22:25:14.22 spid25s     Attribute synchronization initialized
+2026-11-12 22:25:14.22 spid13s     SQL Server Audit is starting the audits. This is an informational message. No user action is required.
+2026-11-12 22:25:14.22 spid25s     Attribute synchronization manager initialized
+2026-11-12 22:25:14.23 spid13s     SQL Server Audit has started the audits. This is an informational message. No user action is required.
+2026-11-12 22:25:14.28 spid13s     SQL Trace ID 1 was started by login "sa".
+2026-11-12 22:25:14.29 spid13s     Server name is 'auth-sqlserver'. This is an informational message only. No user action is required.
+2026-11-12 22:25:14.31 spid17s     Clearing tempdb database.
+2026-11-12 22:25:14.31 spid34s     [4]. Feature Status: PVS: 0. CTR: 0. ConcurrentPFSUpdate: 1. ConcurrentGAMUpdate: 1. ConcurrentSGAMUpdate: 1, CleanupUnderUserTransaction: 0. TranLevelPVS: 0
+2026-11-12 22:25:14.31 spid36s     Always On: The availability replica manager is starting. This is an informational message only. No user action is required.
+2026-11-12 22:25:14.32 spid34s     Starting up database 'msdb'.
+2026-11-12 22:25:14.32 spid36s     Always On: The availability replica manager is waiting for the instance of SQL Server to allow client connections. This is an informational message only. No user action is required.
+2026-11-12 22:25:14.50 spid34s     Converting database 'msdb' from version 927 to the current version 957.
+2026-11-12 22:25:14.50 spid34s     Database 'msdb' running the upgrade step from version 927 to version 928.
+2026-11-12 22:25:14.51 spid34s     Database 'msdb' running the upgrade step from version 928 to version 929.
+2026-11-12 22:25:14.54 spid34s     Database 'msdb' running the upgrade step from version 929 to version 930.
+2026-11-12 22:25:14.58 spid17s     [2]. Feature Status: PVS: 0. CTR: 0. ConcurrentPFSUpdate: 1. ConcurrentGAMUpdate: 1. ConcurrentSGAMUpdate: 1, CleanupUnderUserTransaction: 0. TranLevelPVS: 0
+2026-11-12 22:25:14.58 spid17s     Starting up database 'tempdb'.
+2026-11-12 22:25:14.63 spid17s     The tempdb database has 1 data file(s).
+2026-11-12 22:25:14.67 spid27s     The Service Broker endpoint is in disabled or stopped state.
+2026-11-12 22:25:14.67 spid27s     The Database Mirroring endpoint is in disabled or stopped state.
+2026-11-12 22:25:14.67 spid34s     Database 'msdb' running the upgrade step from version 930 to version 931.
+2026-11-12 22:25:14.68 spid34s     Database 'msdb' running the upgrade step from version 931 to version 932.
+2026-11-12 22:25:14.68 spid27s     Service Broker manager has started.
+2026-11-12 22:25:14.69 spid34s     Database 'msdb' running the upgrade step from version 932 to version 933.
+2026-11-12 22:25:14.70 spid34s     Database 'msdb' running the upgrade step from version 933 to version 934.
+2026-11-12 22:25:14.71 spid34s     Database 'msdb' running the upgrade step from version 934 to version 935.
+2026-11-12 22:25:14.71 spid34s     Database 'msdb' running the upgrade step from version 935 to version 936.
+2026-11-12 22:25:14.72 spid34s     Database 'msdb' running the upgrade step from version 936 to version 937.
+2026-11-12 22:25:14.72 spid34s     Database 'msdb' running the upgrade step from version 937 to version 938.
+2026-11-12 22:25:14.72 spid34s     Database 'msdb' running the upgrade step from version 938 to version 939.
+2026-11-12 22:25:14.73 spid34s     Database 'msdb' running the upgrade step from version 939 to version 940.
+2026-11-12 22:25:14.73 spid34s     Database 'msdb' running the upgrade step from version 940 to version 941.
+2026-11-12 22:25:14.74 spid34s     Database 'msdb' running the upgrade step from version 941 to version 942.
+2026-11-12 22:25:14.74 spid34s     Database 'msdb' running the upgrade step from version 942 to version 943.
+2026-11-12 22:25:14.77 spid34s     Database 'msdb' running the upgrade step from version 943 to version 944.
+2026-11-12 22:25:14.77 spid34s     Database 'msdb' running the upgrade step from version 944 to version 945.
+2026-11-12 22:25:14.79 spid34s     Database 'msdb' running the upgrade step from version 945 to version 946.
+2026-11-12 22:25:14.79 spid34s     Database 'msdb' running the upgrade step from version 946 to version 947.
+2026-11-12 22:25:14.80 spid34s     Database 'msdb' running the upgrade step from version 947 to version 948.
+2026-11-12 22:25:14.80 spid34s     Database 'msdb' running the upgrade step from version 948 to version 949.
+2026-11-12 22:25:14.81 spid34s     Database 'msdb' running the upgrade step from version 949 to version 950.
+2026-11-12 22:25:14.81 spid34s     Database 'msdb' running the upgrade step from version 950 to version 951.
+2026-11-12 22:25:14.82 spid34s     Database 'msdb' running the upgrade step from version 951 to version 952.
+2026-11-12 22:25:14.83 spid34s     Database 'msdb' running the upgrade step from version 952 to version 953.
+2026-11-12 22:25:14.84 spid34s     Database 'msdb' running the upgrade step from version 953 to version 954.
+2026-11-12 22:25:14.84 spid34s     Database 'msdb' running the upgrade step from version 954 to version 955.
+2026-11-12 22:25:14.84 spid34s     Database 'msdb' running the upgrade step from version 955 to version 956.
+2026-11-12 22:25:14.86 spid34s     Database 'msdb' running the upgrade step from version 956 to version 957.
+2026-11-12 22:25:14.89 spid13s     Recovery is complete. This is an informational message only. No user action is required.
