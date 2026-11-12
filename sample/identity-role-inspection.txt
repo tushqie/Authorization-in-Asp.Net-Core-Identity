@@ -1,0 +1,304 @@
+AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs-10-  public static class IdentityExtensions
+AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs-11-  {
+AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs-12-    public static IServiceCollection AddIdentityHandlersAndStores(this IServiceCollection services)
+AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs-13-    {
+AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs-14-      services.AddIdentityApiEndpoints<AppUser>()
+AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs:15:              .AddRoles<IdentityRole>()
+AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs-16-              .AddEntityFrameworkStores<AppDbContext>();
+AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs-17-      return services;
+AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs-18-    }
+AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs-19-
+AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs-20-    public static IServiceCollection ConfigureIdentityOptions(this IServiceCollection services)
+--
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-51-        LibraryID = userRegistrationModel.LibraryID,
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-52-      };
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-53-      var result = await userManager.CreateAsync(
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-54-          user,
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-55-          userRegistrationModel.Password);
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs:56:      await userManager.AddToRoleAsync(user, userRegistrationModel.Role);
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-57-
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-58-      if (result.Succeeded)
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-59-        return Results.Ok(result);
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-60-      else
+AuthECAPI/AuthECAPI/Controllers/IdentityUserEndpoints.cs-61-        return Results.BadRequest(result);
+--
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-5-  public static class AuthorizationDemoEndpoints
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-6-  {
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-7-
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-8-    public static IEndpointRouteBuilder MapAuthorizationDemoEndpoints(this IEndpointRouteBuilder app)
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-9-    {
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs:10:      app.MapGet("/AdminOnly", AdminOnly);
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-11-
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-12-      
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs:13:      app.MapGet("/AdminOrTeacher", [Authorize(Roles = "Admin,Teacher")] ()=>
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs:14:      { return "Admin Or Teacher"; });
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-15-
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs:16:      app.MapGet("/LibraryMembersOnly", [Authorize(Policy = "HasLibraryId")] () =>
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-17-      { return "Library members only"; });
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-18-
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs:19:      app.MapGet("/ApplyForMaternityLeave", [Authorize(Roles = "Teacher", Policy = "FemalesOnly")] () =>
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-20-      { return "Applied for maternity leave."; });
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-21-
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-22-      app.MapGet("/Under10sAndFemale",
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-23-      [Authorize(Policy = "Under10")]
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-24-      [Authorize(Policy = "FemalesOnly")] () =>
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-25-      { return "Under 10 And Female"; });
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-26-
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-27-      return app;
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-28-    }
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-29-
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs:30:    [Authorize(Roles ="Admin")]
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs:31:    private static string AdminOnly()
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs:32:    { return "Admin Only"; }
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-33-  }
+AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs-34-}
+--
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-23-                .HasAnnotation("ProductVersion", "8.0.7")
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-24-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-25-
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-26-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-27-
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs:28:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-29-                {
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-30-                    b.Property<string>("Id")
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-31-                        .HasColumnType("nvarchar(450)");
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-32-
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-33-                    b.Property<string>("ConcurrencyStamp")
+--
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-50-                        .HasFilter("[NormalizedName] IS NOT NULL");
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-51-
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-52-                    b.ToTable("AspNetRoles", (string)null);
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-53-                });
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-54-
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs:55:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-56-                {
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-57-                    b.Property<int>("Id")
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-58-                        .ValueGeneratedOnAdd()
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-59-                        .HasColumnType("int");
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-60-
+--
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-251-                        .HasColumnType("int");
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-252-
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-253-                    b.HasDiscriminator().HasValue("AppUser");
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-254-                });
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-255-
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs:256:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-257-                {
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs:258:                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-259-                        .WithMany()
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-260-                        .HasForeignKey("RoleId")
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-261-                        .OnDelete(DeleteBehavior.Cascade)
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-262-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-263-                });
+--
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-280-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-281-                });
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-282-
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-283-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-284-                {
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs:285:                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-286-                        .WithMany()
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-287-                        .HasForeignKey("RoleId")
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-288-                        .OnDelete(DeleteBehavior.Cascade)
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-289-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240813044904_AddedGenderDOBLibraryID.Designer.cs-290-
+--
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-23-                .HasAnnotation("ProductVersion", "8.0.7")
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-24-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-25-
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-26-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-27-
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs:28:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-29-                {
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-30-                    b.Property<string>("Id")
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-31-                        .HasColumnType("nvarchar(450)");
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-32-
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-33-                    b.Property<string>("ConcurrencyStamp")
+--
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-50-                        .HasFilter("[NormalizedName] IS NOT NULL");
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-51-
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-52-                    b.ToTable("AspNetRoles", (string)null);
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-53-                });
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-54-
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs:55:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-56-                {
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-57-                    b.Property<int>("Id")
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-58-                        .ValueGeneratedOnAdd()
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-59-                        .HasColumnType("int");
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-60-
+--
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-221-                    b.HasKey("UserId", "LoginProvider", "Name");
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-222-
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-223-                    b.ToTable("AspNetUserTokens", (string)null);
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-224-                });
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-225-
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs:226:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-227-                {
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs:228:                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-229-                        .WithMany()
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-230-                        .HasForeignKey("RoleId")
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-231-                        .OnDelete(DeleteBehavior.Cascade)
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-232-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-233-                });
+--
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-250-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-251-                });
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-252-
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-253-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-254-                {
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs:255:                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-256-                        .WithMany()
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-257-                        .HasForeignKey("RoleId")
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-258-                        .OnDelete(DeleteBehavior.Cascade)
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-259-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240714024834_NameIsAddedInUserEntity.Designer.cs-260-
+--
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-20-                .HasAnnotation("ProductVersion", "8.0.7")
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-21-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-22-
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-23-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-24-
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs:25:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-26-                {
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-27-                    b.Property<string>("Id")
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-28-                        .HasColumnType("nvarchar(450)");
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-29-
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-30-                    b.Property<string>("ConcurrencyStamp")
+--
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-47-                        .HasFilter("[NormalizedName] IS NOT NULL");
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-48-
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-49-                    b.ToTable("AspNetRoles", (string)null);
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-50-                });
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-51-
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs:52:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-53-                {
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-54-                    b.Property<int>("Id")
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-55-                        .ValueGeneratedOnAdd()
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-56-                        .HasColumnType("int");
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-57-
+--
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-248-                        .HasColumnType("int");
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-249-
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-250-                    b.HasDiscriminator().HasValue("AppUser");
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-251-                });
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-252-
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs:253:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-254-                {
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs:255:                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-256-                        .WithMany()
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-257-                        .HasForeignKey("RoleId")
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-258-                        .OnDelete(DeleteBehavior.Cascade)
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-259-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-260-                });
+--
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-277-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-278-                });
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-279-
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-280-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-281-                {
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs:282:                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-283-                        .WithMany()
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-284-                        .HasForeignKey("RoleId")
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-285-                        .OnDelete(DeleteBehavior.Cascade)
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-286-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/AppDbContextModelSnapshot.cs-287-
+--
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-23-                .HasAnnotation("ProductVersion", "8.0.7")
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-24-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-25-
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-26-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-27-
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs:28:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-29-                {
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-30-                    b.Property<string>("Id")
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-31-                        .HasColumnType("nvarchar(450)");
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-32-
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-33-                    b.Property<string>("ConcurrencyStamp")
+--
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-50-                        .HasFilter("[NormalizedName] IS NOT NULL");
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-51-
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-52-                    b.ToTable("AspNetRoles", (string)null);
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-53-                });
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-54-
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs:55:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-56-                {
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-57-                    b.Property<int>("Id")
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-58-                        .ValueGeneratedOnAdd()
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-59-                        .HasColumnType("int");
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-60-
+--
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-241-                        .HasColumnType("nvarchar(150)");
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-242-
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-243-                    b.HasDiscriminator().HasValue("AppUser");
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-244-                });
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-245-
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs:246:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-247-                {
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs:248:                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-249-                        .WithMany()
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-250-                        .HasForeignKey("RoleId")
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-251-                        .OnDelete(DeleteBehavior.Cascade)
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-252-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-253-                });
+--
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-270-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-271-                });
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-272-
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-273-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-274-                {
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs:275:                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-276-                        .WithMany()
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-277-                        .HasForeignKey("RoleId")
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-278-                        .OnDelete(DeleteBehavior.Cascade)
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-279-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240714025755_NameIsAddedInUserEntity2.Designer.cs-280-
+--
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-23-                .HasAnnotation("ProductVersion", "8.0.7")
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-24-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-25-
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-26-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-27-
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs:28:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-29-                {
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-30-                    b.Property<string>("Id")
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-31-                        .HasColumnType("nvarchar(450)");
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-32-
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-33-                    b.Property<string>("ConcurrencyStamp")
+--
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-50-                        .HasFilter("[NormalizedName] IS NOT NULL");
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-51-
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-52-                    b.ToTable("AspNetRoles", (string)null);
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-53-                });
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-54-
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs:55:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-56-                {
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-57-                    b.Property<int>("Id")
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-58-                        .ValueGeneratedOnAdd()
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-59-                        .HasColumnType("int");
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-60-
+--
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-221-                    b.HasKey("UserId", "LoginProvider", "Name");
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-222-
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-223-                    b.ToTable("AspNetUserTokens", (string)null);
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-224-                });
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-225-
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs:226:            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-227-                {
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs:228:                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-229-                        .WithMany()
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-230-                        .HasForeignKey("RoleId")
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-231-                        .OnDelete(DeleteBehavior.Cascade)
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-232-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-233-                });
+--
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-250-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-251-                });
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-252-
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-253-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-254-                {
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs:255:                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-256-                        .WithMany()
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-257-                        .HasForeignKey("RoleId")
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-258-                        .OnDelete(DeleteBehavior.Cascade)
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-259-                        .IsRequired();
+AuthECAPI/AuthECAPI/Migrations/20240713160809_InitialMigration.Designer.cs-260-
