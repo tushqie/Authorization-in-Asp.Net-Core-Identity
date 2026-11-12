@@ -1,0 +1,10 @@
+========== CONNECTION CONFIGURATION ==========
+Connection string environment variable: SET
+
+========== SQL SERVER CONTAINER ==========
+CONTAINER ID   IMAGE                                        COMMAND                  CREATED          STATUS          PORTS                                         NAMES
+6b3ae56f1947   mcr.microsoft.com/mssql/server:2022-latest   "/opt/mssql/bin/laun…"   26 minutes ago   Up 26 minutes   0.0.0.0:1433->1433/tcp, [::]:1433->1433/tcp   auth-sqlserver
+
+========== SQL SERVER PORT ==========
+1433/tcp -> 0.0.0.0:1433
+1433/tcp -> [::]:1433

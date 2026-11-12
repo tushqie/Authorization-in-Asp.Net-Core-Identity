@@ -1,0 +1,8 @@
+Build started...
+Build succeeded.
+An error occurred while accessing the database. Continuing without the information provided by the database. Error: Login failed for user 'sa'.
+20240713160809_InitialMigration
+20240714024834_NameIsAddedInUserEntity
+20240714025755_NameIsAddedInUserEntity2
+20240813044904_AddedGenderDOBLibraryID
+Pending status not shown. Unable to determine which migrations have been applied. This can happen when your project uses a version of Entity Framework Core lower than 5.0.0 or when an error occurs while accessing the database.
