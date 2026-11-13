@@ -1,0 +1,9 @@
+========== REGISTERED USERS AND ASSIGNED ROLES ==========
+Id|Email|UserName|FullName|Gender|LibraryID|AssignedRole
+--|-----|--------|--------|------|---------|------------
+9a7af58d-1c8e-4b76-b54b-a24ad2c5ee06|admin@test.com|admin@test.com|Test Administrator|Male|1001|Admin
+
+========== TOTAL REGISTERED USERS ==========
+TotalUsers
+----------
+1
