@@ -1,0 +1,11 @@
+========== API PROCESS ==========
+codespa+    4941  0.1  2.0 19615388 169092 pts/0 Sl   01:09   0:03 dotnet run --no-build --project AuthECAPI/AuthECAPI/AuthECAPI.csproj --urls http://0.0.0.0:5007
+
+========== LOCAL SWAGGER STATUS ==========
+HTTP 200
+
+========== SIGNIN ROUTE IN SWAGGER ==========
+"/api/signin"
+
+========== API LISTENING PORT ==========
+LISTEN 0      512          0.0.0.0:5007       0.0.0.0:*    users:(("AuthECAPI",pid=5065,fd=276))
