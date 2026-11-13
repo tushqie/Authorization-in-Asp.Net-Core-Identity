@@ -1,0 +1,16 @@
+========== SQL SERVER STATUS ==========
+CONTAINER ID   IMAGE                                        COMMAND                  CREATED       STATUS          PORTS                                         NAMES
+6b3ae56f1947   mcr.microsoft.com/mssql/server:2022-latest   "/opt/mssql/bin/laun…"   3 hours ago   Up 13 minutes   0.0.0.0:1433->1433/tcp, [::]:1433->1433/tcp   auth-sqlserver
+
+========== CHECK DATABASE USERS ==========
+TotalUsers 
+-----------
+          2
+
+(1 rows affected)
+Email                                                                                                                                                                                                                                                            FullName                                                                                                                                              
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------------------------------
+admin@test.com                                                                                                                                                                                                                                                   Test Administrator                                                                                                                                    
+teacher@test.com                                                                                                                                                                                                                                                 Test Female Teacher                                                                                                                                   
+
+(2 rows affected)
