@@ -1,0 +1,4 @@
+Email|FullName|Gender|LibraryID|AssignedRole
+-----|--------|------|---------|------------
+admin@test.com|Test Administrator|Male|1001|Admin
+teacher@test.com|Test Female Teacher|Female|2001|Teacher
