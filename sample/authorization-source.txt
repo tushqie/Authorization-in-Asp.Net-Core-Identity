@@ -1,0 +1,289 @@
+]633;E;for f in AuthECAPI/AuthECAPI/Program.cs AuthECAPI/AuthECAPI/Models/AppUser.cs AuthECAPI/AuthECAPI/Models/AppDbContext.cs AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs AuthECAPI/AuthECAPI/Extensions/AppConfigExtensions.cs AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs AuthECAPI/AuthECAPI/Controllers/AccountEndpoints.cs AuthECAPI/AuthECAPI/AuthECAPI.csproj;f828f4f6-36d7-4967-9ccb-3c91a9e08120]633;C
+
+========== AuthECAPI/AuthECAPI/Program.cs ==========
+using AuthECAPI.Controllers;
+using AuthECAPI.Extensions;
+using AuthECAPI.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddSwaggerExplorer()
+                .InjectDbContext(builder.Configuration)
+                .AddAppConfig(builder.Configuration)
+                .AddIdentityHandlersAndStores()
+                .ConfigureIdentityOptions()
+                .AddIdentityAuth(builder.Configuration);
+
+var app = builder.Build();
+
+app.ConfigureSwaggerExplorer()
+   .ConfigureCORS(builder.Configuration)
+   .AddIdentityAuthMiddlewares();
+
+app.MapControllers();
+app.MapGroup("/api")
+   .MapIdentityApi<AppUser>();
+app.MapGroup("/api")
+   .MapIdentityUserEndpoints()
+   .MapAccountEndpoints()
+   .MapAuthorizationDemoEndpoints();
+
+app.Run();
+
+
+
+
+
+========== AuthECAPI/AuthECAPI/Models/AppUser.cs ==========
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace AuthECAPI.Models
+{
+    public class AppUser:IdentityUser
+    {
+        [PersonalData]
+        [Column(TypeName ="nvarchar(150)")]
+        public string FullName { get; set; }
+
+        [PersonalData]
+        [Column(TypeName = "nvarchar(10)")]
+        public string Gender { get; set; }
+
+        [PersonalData]
+        public DateOnly DOB { get; set; }
+
+        [PersonalData]
+        public int? LibraryID { get; set; }
+
+  }
+}
+
+
+========== AuthECAPI/AuthECAPI/Models/AppDbContext.cs ==========
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace AuthECAPI.Models
+{
+    public class AppDbContext:IdentityDbContext
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
+        { }
+
+        public DbSet<AppUser> AppUsers { get; set; }
+    }
+}
+
+
+========== AuthECAPI/AuthECAPI/Extensions/IdentityExtensions.cs ==========
+﻿using AuthECAPI.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+namespace AuthECAPI.Extensions
+{
+  public static class IdentityExtensions
+  {
+    public static IServiceCollection AddIdentityHandlersAndStores(this IServiceCollection services)
+    {
+      services.AddIdentityApiEndpoints<AppUser>()
+              .AddRoles<IdentityRole>()
+              .AddEntityFrameworkStores<AppDbContext>();
+      return services;
+    }
+
+    public static IServiceCollection ConfigureIdentityOptions(this IServiceCollection services)
+    {
+      services.Configure<IdentityOptions>(options =>
+      {
+        options.Password.RequireDigit = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+        options.User.RequireUniqueEmail = true;
+      });
+      return services;
+    }
+
+    //Auth = Authentication + Authorization
+    public static IServiceCollection AddIdentityAuth(
+        this IServiceCollection services,
+        IConfiguration config)
+    {
+      services
+      .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+      .AddJwtBearer(y =>
+        {
+          y.SaveToken = false;
+          y.TokenValidationParameters = new TokenValidationParameters
+          {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(
+                                config["AppSettings:JWTSecret"]!)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+          };
+        });
+      services.AddAuthorization(options =>
+      {
+        options.FallbackPolicy = new AuthorizationPolicyBuilder()
+          .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+          .RequireAuthenticatedUser()
+          .Build();
+
+        options.AddPolicy("HasLibraryID", policy => policy.RequireClaim("LibraryID"));
+        options.AddPolicy("FemalesOnly", policy => policy.RequireClaim("Gender","Female"));
+        options.AddPolicy("Under10", policy => policy.RequireAssertion(context =>
+        Int32.Parse(context.User.Claims.First(x => x.Type=="Age").Value)<10));
+
+      });
+
+
+      return services;
+    }
+
+    public static WebApplication AddIdentityAuthMiddlewares(this WebApplication app)
+    {
+      app.UseAuthentication();
+      app.UseAuthorization();
+      return app;
+    }
+
+  }
+}
+
+
+
+========== AuthECAPI/AuthECAPI/Extensions/AppConfigExtensions.cs ==========
+﻿using AuthECAPI.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace AuthECAPI.Extensions
+{
+    public static class AppConfigExtensions
+    {
+        public static WebApplication ConfigureCORS(
+            this WebApplication app,
+            IConfiguration config)
+        {
+            app.UseCors();
+            return app;
+        }
+
+        public static IServiceCollection AddAppConfig(
+            this IServiceCollection services,
+            IConfiguration config)
+        {
+            services.Configure<AppSettings>(config.GetSection("AppSettings"));
+            return services;
+        }
+    }
+}
+
+
+========== AuthECAPI/AuthECAPI/Controllers/AuthorizationDemoEndpoints.cs ==========
+﻿using Microsoft.AspNetCore.Authorization;
+
+namespace AuthECAPI.Controllers
+{
+  public static class AuthorizationDemoEndpoints
+  {
+
+    public static IEndpointRouteBuilder MapAuthorizationDemoEndpoints(this IEndpointRouteBuilder app)
+    {
+      app.MapGet("/AdminOnly", AdminOnly);
+
+      
+      app.MapGet("/AdminOrTeacher", [Authorize(Roles = "Admin,Teacher")] ()=>
+      { return "Admin Or Teacher"; });
+
+      app.MapGet("/LibraryMembersOnly", [Authorize(Policy = "HasLibraryId")] () =>
+      { return "Library members only"; });
+
+      app.MapGet("/ApplyForMaternityLeave", [Authorize(Roles = "Teacher", Policy = "FemalesOnly")] () =>
+      { return "Applied for maternity leave."; });
+
+      app.MapGet("/Under10sAndFemale",
+      [Authorize(Policy = "Under10")]
+      [Authorize(Policy = "FemalesOnly")] () =>
+      { return "Under 10 And Female"; });
+
+      return app;
+    }
+
+    [Authorize(Roles ="Admin")]
+    private static string AdminOnly()
+    { return "Admin Only"; }
+  }
+}
+
+
+========== AuthECAPI/AuthECAPI/Controllers/AccountEndpoints.cs ==========
+﻿using AuthECAPI.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+
+namespace AuthECAPI.Controllers
+{
+  public static class AccountEndpoints
+  {
+    public static IEndpointRouteBuilder MapAccountEndpoints(this IEndpointRouteBuilder app)
+    {
+      app.MapGet("/UserProfile", GetUserProfile);
+      return app;
+    }
+
+    [Authorize]
+    private static async Task<IResult> GetUserProfile(
+      ClaimsPrincipal user,
+      UserManager<AppUser> userManager)
+    {
+      string userID = user.Claims.First(x => x.Type == "UserID").Value;
+      var userDetails = await userManager.FindByIdAsync(userID);
+      return Results.Ok(
+        new
+        {
+          Email = userDetails?.Email,
+          FullName = userDetails?.FullName,
+        });
+    }
+  }
+}
+
+
+========== AuthECAPI/AuthECAPI/AuthECAPI.csproj ==========
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+</Project>
